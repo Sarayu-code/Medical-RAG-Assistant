@@ -51,6 +51,10 @@ class Retriever:
 
         self.doc_embs = self.emb.encode(self.doc_texts, normalize_embeddings=True)
 
+    def reload(self):
+        # simple rebuild
+        self.__init__()
+
     def retrieve(self, query: str, k: int = 6) -> List[Document]:
         if self.doc_embs is None or not self.doc_texts:
             return []

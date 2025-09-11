@@ -1,48 +1,59 @@
 from fastapi import FastAPI
-from app.schemas import AskRequest, AskResponse, Source
+from app.schemas import AskRequest, Source
 from app.guardrails import emergency_flag, DISCLAIMER, instruction_prompt
 from app.rag import retriever_singleton, format_context, synthesize_answer
 from app.stt_tts import dummy_tts
+from app.condition_links import find_condition_pages, extract_symptoms_from_pages
 
-# Serve Swagger UI at root so you see "Try it out" immediately
-app = FastAPI(
-    title="Medical RAG Voice Assistant",
-    version="0.1.0",
-    docs_url="/",
-    redoc_url=None
-)
+app = FastAPI(title="Medical RAG Voice Assistant", version="0.1.0")
 
 @app.get("/health")
 def health():
     return {"status": "ok"}
 
-@app.post("/ask", response_model=AskResponse)
+@app.post("/ask")
 def ask(req: AskRequest):
-    # Guardrails
     emerg = emergency_flag(req.query)
     safety = {"disclaimer": DISCLAIMER, "emergency": emerg}
 
-    # Retrieve documents
     docs = retriever_singleton.retrieve(req.query, k=req.top_k)
-
-    # Compose system prompt and context (for future LLM use)
     system = instruction_prompt()
-    _context = format_context(docs)  # currently not used by the stub answer
-
-    # Synthesize (stub now; swap for local LLM like Ollama later)
+    _ = format_context(docs)
     answer = synthesize_answer(req.query, docs, system)
 
-    # Package sources (first 4)
+    # Build sources from retrieved docs
     sources = []
     for d in docs[:4]:
         m = d.metadata or {}
-        sources.append(Source(
-            title=m.get("title", "Source"),
-            url=m.get("source", ""),
-            chunk_id=m.get("chunk_id", -1)
-        ))
+        sources.append({
+            "title": m.get("title", "Source"), 
+            "url": m.get("source", ""), 
+            "chunk_id": m.get("chunk_id", -1)
+        })
 
-    # Optional TTS (swap dummy_tts for real TTS when ready)
+    # NEW: condition pages (MedlinePlus + CDC)
+    condition_pages = find_condition_pages(req.query)
+
+    # OPTIONAL: If we found condition pages, extract symptoms and prepend a concise list
+    if condition_pages:
+        symptoms = extract_symptoms_from_pages(condition_pages)
+        if symptoms:
+            bullets = "\n".join(f"- {s}" for s in symptoms[:6])
+            answer = f"**Symptoms (from reputable sources):**\n{bullets}\n\n{answer}"
+
     audio_b64 = dummy_tts(answer) if req.voice else None
+    
+    return {
+        "answer": answer,
+        "sources": sources,
+        "safety": safety,
+        "audio_b64": audio_b64,
+        "condition_pages": condition_pages
+    }
 
-    return AskResponse(answer=answer, sources=sources, safety=safety, audio_b64=audio_b64)
+@app.get("/")
+def root():
+    return {
+        "message": "Medical RAG Assistant. POST to /ask with {'query': '...'}",
+        "disclaimer": DISCLAIMER,
+    }

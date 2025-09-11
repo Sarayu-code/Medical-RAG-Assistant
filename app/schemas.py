@@ -12,6 +12,23 @@ class Source(BaseModel):
     url: str
     chunk_id: int
 
+class KeywordsRequest(BaseModel):
+    keywords: List[str]
+    max_per_site: int = 8
+
+class ConditionLink(BaseModel):
+    provider: str
+    title: str
+    url: str
+
+class AskResponse(BaseModel):
+    answer: str
+    sources: List[Source]
+    safety: Dict[str, Any] = Field(default_factory=dict)
+    audio_b64: Optional[str] = None
+    condition_pages: List[ConditionLink] = Field(default_factory=list)  # NEW
+
+
 class AskResponse(BaseModel):
     answer: str
     sources: List[Source]

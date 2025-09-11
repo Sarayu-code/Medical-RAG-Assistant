@@ -70,6 +70,20 @@ if submitted:
                 else:
                     st.caption("No audio returned. (Enable TTS in the backend or try again.)")
 
+        # ------------ Condition pages (MedlinePlus / CDC) ------------
+        with st.container(border=True):
+            st.subheader("Condition pages")
+            cps = data.get("condition_pages") or []
+            if cps:
+                for cp in cps:
+                    title = cp.get("title") or cp.get("provider") or "Link"
+                    url = cp.get("url") or ""
+                    if url:
+                        st.markdown(f"• [{title}]({url})", unsafe_allow_html=True)
+            else:
+                st.caption("No condition pages found.")
+
+
         # ------------ Sources ------------
         with st.container(border=True):
             st.subheader("Sources")
