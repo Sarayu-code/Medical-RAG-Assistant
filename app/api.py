@@ -57,3 +57,7 @@ def root():
         "message": "Medical RAG Assistant. POST to /ask with {'query': '...'}",
         "disclaimer": DISCLAIMER,
     }
+
+
+# uvicorn app.api:app --host 0.0.0.0 --port 8000 --reload
+# streamlit run streamlit_app.py
