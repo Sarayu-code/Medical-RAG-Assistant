@@ -1,6 +1,6 @@
-# 🩺 Medical RAG Voice Assistant
+# 🩺 Medical RAG Assistant
 
-> A comprehensive voice-enabled medical assistant that provides **grounded, cited** health information from authoritative sources (MedlinePlus, CDC). **Not medical advice.**
+> A comprehensive medical assistant that provides **grounded, cited** health information from authoritative sources (MedlinePlus, CDC). **Not medical advice.**
 
 [![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://python.org)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115.0-green.svg)](https://fastapi.tiangolo.com)
