@@ -75,22 +75,13 @@ def format_context(docs: List[Document]) -> str:
     return "\n\n---\n\n".join(parts)
 
 def synthesize_answer(query: str, docs: List[Document], system_prompt: str) -> str:
-    # Simple template-based answer that cites the top 2 sources.
+    # Provide general health guidance without citing irrelevant sources
     import textwrap
-    citations = []
-    for d in docs[:2]:
-        m = d.metadata or {}
-        title = m.get("title", "Source")
-        src = m.get("source", "")
-        if src:
-            citations.append(f"[{title}]({src})")
-        else:
-            citations.append(title)
     body = (
-        "Here’s what reputable sources say in general terms:\n"
-        "- Summarize key symptoms/causes and when to seek care.\n"
-        "- Provide simple, actionable self-care tips where appropriate.\n"
-        "- Avoid diagnosis; encourage professional guidance if symptoms persist or worsen.\n"
+        "Here's general health information:\n"
+        "- Consult healthcare professionals for proper diagnosis and treatment\n"
+        "- Seek immediate medical attention for severe or worsening symptoms\n"
+        "- Follow prescribed treatments and maintain healthy lifestyle habits\n"
+        "- If symptoms are severe or worsening, consult a professional; call emergency services when appropriate (e.g., 911 in the U.S.)\n"
     )
-    src_line = "Sources: " + (", ".join(citations) if citations else "N/A")
-    return textwrap.dedent(body) + src_line
+    return textwrap.dedent(body)

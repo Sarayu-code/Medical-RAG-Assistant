@@ -53,6 +53,37 @@ if submitted:
         if safety.get("emergency"):
             st.error("⚠️ Potential emergency detected. If this is an emergency, call your local emergency number (e.g., 911 in the U.S.) now.")
 
+        # ------------ Disease Summary ------------
+        disease_summary = data.get("disease_summary")
+        if disease_summary:
+            with st.container(border=True):
+                st.subheader(f"📋 {disease_summary.get('condition', 'Condition')} Summary")
+                
+                if disease_summary.get('overview'):
+                    st.write("**Overview:**")
+                    st.write(disease_summary['overview'])
+                
+                # Create columns for organized display
+                col1, col2 = st.columns(2)
+                
+                with col1:
+                    if disease_summary.get('symptoms'):
+                        st.write("**Symptoms:**")
+                        st.write(disease_summary['symptoms'])
+                    
+                    if disease_summary.get('causes'):
+                        st.write("**Causes:**")
+                        st.write(disease_summary['causes'])
+                
+                with col2:
+                    if disease_summary.get('treatment'):
+                        st.write("**Treatment:**")
+                        st.write(disease_summary['treatment'])
+                    
+                    if disease_summary.get('prevention'):
+                        st.write("**Prevention:**")
+                        st.write(disease_summary['prevention'])
+
         # ------------ Answer Card ------------
         with st.container(border=True):
             st.subheader("Answer")
@@ -82,27 +113,6 @@ if submitted:
                         st.markdown(f"• [{title}]({url})", unsafe_allow_html=True)
             else:
                 st.caption("No condition pages found.")
-
-
-        # ------------ Sources ------------
-        with st.container(border=True):
-            st.subheader("Sources")
-            sources = data.get("sources") or []
-            if sources:
-                seen = set()
-                for s in sources:
-                    title = s.get("title") or "Source"
-                    url = s.get("url") or ""
-                    key = url or title
-                    if key in seen:
-                        continue
-                    seen.add(key)
-                    if url:
-                        st.markdown(f"• [{title}]({url})", unsafe_allow_html=True)
-                    else:
-                        st.markdown(f"• {title}", unsafe_allow_html=True)
-            else:
-                st.caption("No sources returned.")
 
         # ------------ Safety / Disclaimer ------------
         with st.container(border=True):
