@@ -212,29 +212,6 @@ The system automatically flags queries containing emergency keywords:
 }
 ```
 
-## 📊 Supported Medical Conditions
-
-### Common Diseases
-- Flu, COVID-19, Common Cold, Diabetes, Hypertension, Heart Disease
-
-### Physical Injuries  
-- Sprains, Fractures, Bruises, Muscle Aches
-
-### Women's Health
-- Menopause, PCOS, Hormonal Imbalance
-
-### Neurological
-- Stroke, Brain Tumors, Migraines
-
-### Cancer Types
-- Breast, Lung, Colon, Prostate, Skin, Ovarian, Cervical, Pancreatic, Liver
-
-### Infectious Diseases
-- COVID-19, Tuberculosis, Measles, Cholera
-
-### Other Conditions
-- Nosebleeds, Low/High Blood Pressure, Skin Conditions, Mental Health
-
 ## 📈 Performance
 
 - **Response Time**: < 2 seconds for most queries
