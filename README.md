@@ -33,7 +33,7 @@
 - **Emergency Contact Info**: Reminds users to call 911 when appropriate
 
 ### 🎯 Smart Matching
-- **Intelligent Keyword Detection**: Matches similar terms (heart pain = chest pain)
+- **Intelligent Keyword Detection**: Matches similar terms
 - **Exact Word Boundaries**: Prevents false matches
 - **Priority Matching**: Longer, more specific terms matched first
 
